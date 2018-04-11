@@ -207,7 +207,7 @@
 
             @if(filed.filedClass=="editor"){
             <!--判断是否为文本编辑器-->
-            <textarea  data-toggle="wangEditor"  data-upload="${ctxPath}/upload/wangEditorUpload"   style="height:450px;max-height:550px;margin:10px 0 0 0" name="${filed.filedName!}"  ${filed.notNull?'data-rule=\"required;\"':''}>${(has(content)?content[filed.filedName]:filed.filedValue),xss="escape"}</textarea>
+            <textarea  data-toggle="CKEditor"  data-upload="${ctxPath}/upload/CKEditorUpload"   style="height:650px;max-height:750px;margin:10px 0 0 0" name="${filed.filedName!}"  ${filed.notNull?'data-rule=\"required;\"':''}>${(has(content)?content[filed.filedName]:filed.filedValue),xss="escape"}</textarea>
             @}
 
             @if(filed.filedClass=="textarea"){

@@ -1,14 +1,16 @@
 package com.zhiliao.common.upload;
 
+import com.alibaba.fastjson.JSONObject;
+import com.zhiliao.common.exception.ApiException;
+import com.zhiliao.common.upload.bean.UploadBean;
 import com.zhiliao.common.utils.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+
 
 
 @RestController
@@ -20,21 +22,31 @@ public class UploadController {
 
     @RequestMapping
     public String upload(@RequestParam("file") MultipartFile multipartFile,
-                         HttpServletRequest request) throws Exception {
-        Map result = uploadComponent.uploadFile(multipartFile,request);
-        if ((Boolean) result.get("success"))
-            return JsonUtil.toUploadSUCCESS("上传成功！", (String) result.get("fileName"));
-        return JsonUtil.toUploadRROR("上传失败！");
+                         HttpServletRequest request){
+        UploadBean result = uploadComponent.uploadFile(multipartFile,request);
+
+        return JsonUtil.toUploadSUCCESS("上传成功！",result.getFileUrl());
     }
 
 
     @RequestMapping("/wangEditorUpload")
-    public String kindEditorUpload(@RequestParam("file") MultipartFile multipartFile,
-                         HttpServletRequest request) throws Exception {
-        Map result = uploadComponent.uploadFile(multipartFile,request);
-        if ((Boolean) result.get("success"))
-            return (String) result.get("fileName");
-        return "error|服务器端错误";
+    public String WangEditorUpload(@RequestParam("file") MultipartFile multipartFile,
+                         HttpServletRequest request) {
+        UploadBean result = uploadComponent.uploadFile(multipartFile,request);
+        return result.getFileUrl();
+
+    }
+
+    @RequestMapping("/CKEditorUpload")
+    public String CKEditorUpload(@RequestParam("upload") MultipartFile multipartFile,
+                                 HttpServletRequest request) {
+        StringBuffer sb=new StringBuffer();
+        UploadBean result = uploadComponent.uploadFile(multipartFile,request);
+        sb.append("<script type=\"text/javascript\">");
+        sb.append("window.parent.CKEDITOR.tools.callFunction("+ request.getParameter("CKEditorFuncNum") + ",'" +result.getFileRelativePath()+"','')");
+        sb.append("</script>");
+        return sb.toString();
+
     }
 
 }

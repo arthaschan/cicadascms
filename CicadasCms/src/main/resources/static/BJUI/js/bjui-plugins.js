@@ -685,6 +685,13 @@
             editor.create();
         })
 
+        $box.find('[data-toggle="CKEditor"]').each(function() {
+            var $this = $(this);
+            var uploadUrl = $this.data('upload');
+            var CKeditor =  $this.ckeditor().editor;
+            CKeditor.config.filebrowserImageUploadUrl = uploadUrl;
+        })
+
         /* colorpicker */
         $box.find('[data-toggle="colorpicker"]').each(function() {
             var $this     = $(this)

@@ -20,6 +20,7 @@ public class TCmsFriendlink implements Serializable {
     @Column(name = "link_url")
     private String linkUrl;
 
+    @OrderBy("desc")
     @Column(name = "sort_id")
     private Integer sortId;
 
