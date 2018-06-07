@@ -54,12 +54,39 @@ public class TSysAttachment implements Serializable {
     @Column(name = "file_size")
     private Float fileSize;
 
+
+
     /**
      * 附件网址
      */
     private String url;
 
+    @Column(name = "original_file_name")
+    private String originalFilename;
+
+    /**
+     * key
+     */
+    @Column(name = "file_key")
+    private String fileKey;
+
+    public String getFileKey() {
+        return fileKey;
+    }
+
+    public void setFileKey(String fileKey) {
+        this.fileKey = fileKey;
+    }
+
     private static final long serialVersionUID = 1L;
+
+    public String getOriginalFilename() {
+        return originalFilename;
+    }
+
+    public void setOriginalFilename(String originalFilename) {
+        this.originalFilename = originalFilename;
+    }
 
     /**
      * @return id

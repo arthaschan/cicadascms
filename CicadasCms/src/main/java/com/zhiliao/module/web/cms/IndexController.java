@@ -1,5 +1,6 @@
 package com.zhiliao.module.web.cms;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.zhiliao.common.constant.CmsConst;
@@ -7,6 +8,7 @@ import com.zhiliao.common.exception.CmsException;
 import com.zhiliao.common.utils.*;
 import com.zhiliao.component.beetl.thread.HtmlThread;
 import com.zhiliao.module.web.cms.service.*;
+import com.zhiliao.module.web.system.service.AttachmentService;
 import com.zhiliao.mybatis.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +62,9 @@ public class IndexController {
 
     @Autowired
     private AdService adService;
+
+    @Autowired
+    private AttachmentService attachmentService;
 
     @Value("${system.http.protocol}")
     private String httpProtocol;
@@ -275,6 +283,39 @@ public class IndexController {
         if(CmsUtil.isNullOrEmpty(id))
             throw new CmsException("广告不存在！");
         return adService.toJavascript(id);
+    }
+
+    @RequestMapping(value = "/res/{key}.{resType}")
+    public void showAttr(@PathVariable(value = "key",required = false) String key,
+                         @PathVariable(value = "resType",required = false) String resType,
+                         HttpServletRequest request,HttpServletResponse response) {
+        if(CmsUtil.isNullOrEmpty(key))return;
+        log.debug("获取资源：{}.{}",key,resType);
+        TSysAttachment attachment = attachmentService.findByKey(key);
+        if(CmsUtil.isNullOrEmpty(attachment)||!attachment.getFileName().contains(resType))
+            throw new CmsException("文件不存在！");
+        try {
+            response.reset();
+            String userAgent = request.getHeader("user-agent").toLowerCase();
+            if (userAgent.contains("msie") || userAgent.contains("like gecko")||userAgent.contains("trident")||userAgent.contains("edge")) {
+                attachment.setOriginalFilename(URLEncoder.encode(attachment.getOriginalFilename(), "UTF-8"));
+            } else {
+                attachment.setOriginalFilename(new String(attachment.getOriginalFilename().getBytes("utf-8"), "ISO8859-1"));
+            }
+            response.setHeader("Content-disposition", "attachment;filename="+attachment.getOriginalFilename());
+            response.setContentType(attachment.getFileExtname());
+            FileCopyUtils.copy(new FileInputStream(attachment.getFilePath()), response.getOutputStream());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            throw new CmsException(e.getMessage());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw new CmsException(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CmsException(e.getMessage());
+        }
+
     }
 
     private String view(String viewName){

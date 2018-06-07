@@ -15,5 +15,7 @@
     <result column="file_path" jdbcType="VARCHAR" property="filePath" />
     <result column="file_size" jdbcType="REAL" property="fileSize" />
     <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="original_file_name" jdbcType="VARCHAR" property="originalFilename" />
+    <result column="file_key" jdbcType="VARCHAR" property="fileKey" />
   </resultMap>
 </mapper>

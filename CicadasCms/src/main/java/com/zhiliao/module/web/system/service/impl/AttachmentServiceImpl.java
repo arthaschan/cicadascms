@@ -41,6 +41,13 @@ public class AttachmentServiceImpl implements AttachmentService{
         return JsonUtil.toSUCCESS("删除成功!");
     }
 
+    @Override
+    public TSysAttachment findByKey(String key) {
+        TSysAttachment attachment = new TSysAttachment();
+        attachment.setFileKey(key);
+        return this.attachmentMapper.selectOne(attachment);
+    }
+
     @Async
     public void deleteAttachmentFile(Long id){
         TSysAttachment attachment = this.attachmentMapper.selectByPrimaryKey(id);

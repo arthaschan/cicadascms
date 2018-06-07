@@ -17,6 +17,8 @@ public interface AttachmentService{
 
     String delete(Long[] ids);
 
+    TSysAttachment findByKey(String key);
+
     List<TSysAttachment> findList(TSysAttachment pojo);
 
     List<TSysAttachment> findAll();

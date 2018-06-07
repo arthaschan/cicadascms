@@ -43,7 +43,7 @@ public class UploadController {
         StringBuffer sb=new StringBuffer();
         UploadBean result = uploadComponent.uploadFile(multipartFile,request);
         sb.append("<script type=\"text/javascript\">");
-        sb.append("window.parent.CKEDITOR.tools.callFunction("+ request.getParameter("CKEditorFuncNum") + ",'" +result.getFileRelativePath()+"','')");
+        sb.append("window.parent.CKEDITOR.tools.callFunction("+ request.getParameter("CKEditorFuncNum") + ",'" +result.getFileUrl()+"','')");
         sb.append("</script>");
         return sb.toString();
 
