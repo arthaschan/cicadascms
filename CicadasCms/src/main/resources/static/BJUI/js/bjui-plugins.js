@@ -689,6 +689,8 @@
             var $this = $(this);
             var uploadUrl = $this.data('upload');
             var CKeditor =  $this.ckeditor().editor;
+            CKEDITOR.config.extraAllowedContent = 'video [*]{*}(*);source [*]{*}(*);';
+            CKeditor.config.height=450;
             CKeditor.config.filebrowserImageUploadUrl = uploadUrl;
         })
 
