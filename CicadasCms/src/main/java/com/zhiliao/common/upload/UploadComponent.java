@@ -64,8 +64,6 @@ public class UploadComponent {
         attachment.setFileExtname(multipartFile.getContentType());
         attachment.setFileKey(UUID.randomUUID().toString().replace("-",""));
         attachment.setOriginalFilename(multipartFile.getOriginalFilename());
-
-        System.out.println(attachment.getFileExtname()+"。。。。。。。。。。。。。。。。。。。。。");
         /*创建uploadBean*/
         UploadBean result = new UploadBean();
         String fileType = this.getFileType(attachment.getOriginalFilename());
