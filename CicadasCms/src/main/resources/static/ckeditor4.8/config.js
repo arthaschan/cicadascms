@@ -17,6 +17,5 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.extraPlugins = 'video';
     config.removeButtons = 'Scayt,Anchor,PasteFromWord,PasteText,Paste,Copy,Cut,About';
-
     config.font_names='宋体/SimSun;新宋体/NSimSun;仿宋_GB2312/FangSong_GB2312;楷体_GB2312/KaiTi_GB2312;黑体/SimHei;微软雅黑/Microsoft YaHei;'+ config.font_names;
 };
