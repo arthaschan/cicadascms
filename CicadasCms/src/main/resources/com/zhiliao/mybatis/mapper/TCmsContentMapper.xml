@@ -62,7 +62,7 @@
         <trim prefix="WHERE ("  suffix=")" prefixOverrides="AND|OR">
             category_id = #{categoryId}
             <foreach item="value" index="key" collection="param.entrySet()" >
-                and  ${key} = ${value}
+                and  ${key} = #{value}
             </foreach>
         </trim>
     </select>
@@ -91,7 +91,7 @@
         </trim>
         <choose>
             <when test="orderField!=null and orderField!='' and orderDirection!=null and orderDirection!='' ">
-                order by ${orderField} ${orderDirection}
+                order by #{orderField} #{orderDirection}
             </when>
             <otherwise>
                 order by content_id  DESC
