@@ -82,8 +82,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(transactionManager = "masterTransactionManager")
     public String save(TSysRole role,Integer[] permissionId) {
-        role.setRolename(PinyinUtil.convertLower(HtmlKit.getText(role.getRolename()).trim()));
         if(role!=null){
+            role.setRolename(PinyinUtil.convertLower(HtmlKit.getText(role.getRolename()).trim()));
             if(roleMapper.insert(role)>0)
                 if(permissionId!=null&&permissionId.length>0){
                    /* 遍历添加角色权限*/

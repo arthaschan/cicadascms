@@ -46,8 +46,8 @@ public class LogAspect {
         String principal =(String) session.getAttribute("username");
         if(StrUtil.isBlank(principal))
             principal = " - ";
-        logger.info("@Syslog value : {} username:{}",log.value());
         if (log != null) {
+            logger.info("@Syslog value : {} username:{}",log.value());
             String content =buildeContent(joinPoint, methodName, request);
             logService.saveLog(content,new Date(),principal,log.value());
         }
