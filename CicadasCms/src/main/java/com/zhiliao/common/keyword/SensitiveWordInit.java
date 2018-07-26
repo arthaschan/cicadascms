@@ -116,7 +116,11 @@ public class SensitiveWordInit {
 		} catch (Exception e) {
 			throw e;
 		}finally{
-			read.close();
+			try{
+				read.close();
+			}catch (Exception e){
+				e.printStackTrace();
+			}
 		}
 		return set;
 	}
