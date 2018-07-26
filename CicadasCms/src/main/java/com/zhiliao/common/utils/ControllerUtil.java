@@ -216,20 +216,20 @@ public class ControllerUtil {
         boolean mobileFlag = false;
         String via = request.getHeader("Via");
         String userAgent = request.getHeader("user-agent");
-        for (int i = 0; via != null && !via.trim().equals("") && i < mobileGateWayHeaders.length; i++) {
+        for (int i = 0; via != null && via.trim().length()!=0 && i < mobileGateWayHeaders.length; i++) {
             if (via.contains(mobileGateWayHeaders[i])) {
                 mobileFlag = true;
                 break;
             }
         }
-        for (int i = 0; !mobileFlag && userAgent != null && !userAgent.trim().equals("")
+        for (int i = 0; !mobileFlag && userAgent != null && userAgent.trim().length()!=0
                 && i < mobileUserAgents.length; i++) {
             if (userAgent.contains(mobileUserAgents[i])) {
                 mobileFlag = true;
                 break;
             }
         }
-        for (int i = 0; userAgent != null && !userAgent.trim().equals("") && i < pcHeaders.length; i++) {
+        for (int i = 0; userAgent != null && userAgent.trim().length()!=0 && i < pcHeaders.length; i++) {
             if (userAgent.contains(pcHeaders[i])) {
                 pcFlag = true;
                 break;
