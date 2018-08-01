@@ -1,7 +1,5 @@
 package com.zhiliao.common.upload;
 
-
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zhiliao.common.constant.CmsConst;
 import com.zhiliao.common.exception.ApiException;
 import com.zhiliao.common.upload.bean.UploadBean;
@@ -53,6 +51,7 @@ public class UploadComponent {
 
     public UploadBean uploadFile(MultipartFile multipartFile, HttpServletRequest request){
         TSysAttachment attachment = new TSysAttachment();
+        /** 获取用户会话 **/
         UserVo userVo  = (UserVo)request.getSession().getAttribute(CmsConst.SITE_USER_SESSION_KEY);
         if(userVo!=null) {
             attachment.setUserId(userVo.getUserId().toString());
@@ -69,21 +68,16 @@ public class UploadComponent {
         String fileType = this.getFileType(attachment.getOriginalFilename());
         String fileName = this.getFileName(fileType) ;
         String newName =this.getNewFileName(fileName);
-        String os = System.getProperty("os.name");
-        String uploadPath = enableVirtualPath.equals("true")
-                ?(os.toLowerCase().startsWith("win")
-                ?windowsUploadPath
-                :linuxUploadPath)
-                :PathUtil.getRootClassPath()+ File.separator + "static";
+
         if (!multipartFile.isEmpty()) {
-            File file = new File(uploadPath + newName);
+            File file = new File(this.getUploadPath() + newName);
             /*如果不存在就创建*/
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
             try {
                 this.writeFile(multipartFile.getBytes(),file);
-                attachment.setFilePath(uploadPath + newName);
+                attachment.setFilePath(newName);
                 attachment.setFileName(fileName);
                 result.setFileUrl(request.getScheme()+"://"+ ControllerUtil.getDomain()+ "/res/"+attachment.getFileKey()+"."+fileType);
                 attachmentService.save(attachment);
@@ -94,6 +88,16 @@ public class UploadComponent {
         }else{
             throw new ApiException("上传文件不能为空！");
         }
+    }
+
+    public String getUploadPath(){
+        String os = System.getProperty("os.name");
+        String uploadPath = enableVirtualPath.equals("true")
+                ?(os.toLowerCase().startsWith("win")
+                ?windowsUploadPath
+                :linuxUploadPath)
+                :PathUtil.getRootClassPath()+ File.separator + "static";
+        return uploadPath;
     }
 
     public  UploadBean uploadBase64File(String data, HttpServletRequest request){
@@ -122,11 +126,7 @@ public class UploadComponent {
            String fileName = this.getFileName(fileType);
            String newName = this.getNewFileName(fileName);
             attachment.setOriginalFilename(newName);
-            String os = System.getProperty("os.name");
-            String uploadPath = enableVirtualPath.equals("true")
-                    ?(os.toLowerCase().startsWith("win")?windowsUploadPath:linuxUploadPath)
-                    :PathUtil.getRootClassPath()+ File.separator + "static";
-            File file = new File(uploadPath + newName);
+            File file = new File(this.getUploadPath() + newName);
             attachment.setFilePath(file.getPath());
             attachment.setFileName(fileName);
             /*如果不存在就创建*/

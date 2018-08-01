@@ -285,38 +285,6 @@ public class IndexController {
         return adService.toJavascript(id);
     }
 
-    @RequestMapping(value = "/res/{key}.{resType}")
-    public void showAttr(@PathVariable(value = "key",required = false) String key,
-                         @PathVariable(value = "resType",required = false) String resType,
-                         HttpServletRequest request,HttpServletResponse response) {
-        if(CmsUtil.isNullOrEmpty(key))return;
-        log.debug("获取资源：{}.{}",key,resType);
-        TSysAttachment attachment = attachmentService.findByKey(key);
-        if(CmsUtil.isNullOrEmpty(attachment)||!attachment.getFileName().contains(resType))
-            throw new CmsException("文件不存在！");
-        try {
-            response.reset();
-            String userAgent = request.getHeader("user-agent").toLowerCase();
-            if (userAgent.contains("msie") || userAgent.contains("like gecko")||userAgent.contains("trident")||userAgent.contains("edge")) {
-                attachment.setOriginalFilename(URLEncoder.encode(attachment.getOriginalFilename(), "UTF-8"));
-            } else {
-                attachment.setOriginalFilename(new String(attachment.getOriginalFilename().getBytes("utf-8"), "ISO8859-1"));
-            }
-            response.setHeader("Content-disposition", "attachment;filename="+attachment.getOriginalFilename());
-            response.setContentType(attachment.getFileExtname());
-            FileCopyUtils.copy(new FileInputStream(attachment.getFilePath()), response.getOutputStream());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            throw new CmsException(e.getMessage());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw new CmsException(e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new CmsException(e.getMessage());
-        }
-
-    }
 
     private String view(String viewName){
         return  this.view("default",viewName);
