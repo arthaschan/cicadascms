@@ -12,7 +12,7 @@ public class StrKit {
 
 	public static boolean notBlank(String str) {
 
-		return str != null || str.length() > 0;
+		return str != null && str.length() > 0;
 	}
 	public static String replace(String content) {
 		String word = content.replace("，", ",").trim();

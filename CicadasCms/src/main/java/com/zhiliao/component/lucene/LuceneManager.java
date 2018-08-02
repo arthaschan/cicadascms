@@ -71,19 +71,24 @@ public class LuceneManager {
 			indexWriter.commit();
 		 } catch (Exception e) {
 			 e.printStackTrace();
-			 try {
-			 	indexWriter.rollback();
-			 } catch (IOException e1) {
-					e1.printStackTrace();
+			 if(indexWriter!=null){
+				 try {
+					 indexWriter.rollback();
+				 } catch (IOException e1) {
+					 e1.printStackTrace();
+				 }
 			 }
 		 }finally {
-			 try {
-				 indexWriter.close();
-			 } catch (IOException e1) {
-				 e1.printStackTrace();
-	    		}
+			if(indexWriter!=null){
+				try {
+					indexWriter.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
-    	}
+		}
+
+    }
 
 
 	/* 删除索引 */
@@ -96,16 +101,20 @@ public class LuceneManager {
 			log.info("deleted:{}",result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			try {
-				indexWriter.rollback();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if(indexWriter!=null){
+				try {
+					indexWriter.rollback();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		} finally {
-			try {
-				indexWriter.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if(indexWriter!=null){
+				try {
+					indexWriter.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
@@ -122,16 +131,20 @@ public class LuceneManager {
            log.info("deleted:{}",result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			try {
-				indexWriter.rollback();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if(indexWriter!=null){
+				try {
+					indexWriter.rollback();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		} finally {
-			try {
-				indexWriter.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if(indexWriter!=null){
+				try {
+					indexWriter.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
@@ -147,16 +160,20 @@ public class LuceneManager {
 			indexWriter.updateDocument(new Term("id", indexObject.getId()),DocumentUtil.IndexObject2Document(indexObject));
 		} catch (Exception e) {
 			e.printStackTrace();
-			try {
-				indexWriter.rollback();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if(indexWriter!=null){
+				try {
+					indexWriter.rollback();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		} finally {
-			try {
-				indexWriter.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if(indexWriter!=null){
+				try {
+					indexWriter.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
@@ -194,10 +211,12 @@ public class LuceneManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			try {
-				indexReader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if(indexReader!=null){
+				try {
+					indexReader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return pageQuery;
